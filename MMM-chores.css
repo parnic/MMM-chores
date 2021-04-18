@@ -1,0 +1,83 @@
+.MMM-chores {
+  line-height: 0.9em;
+  text-align: left;
+}
+
+/* Customize the label (the container) */
+ .MMM-chores .chores-container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 6px;
+  font-size: 20px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.MMM-chores .chores-container input {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.MMM-chores .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 23px;
+  width: 23px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.MMM-chores .chores-container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.MMM-chores .chores-container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.MMM-chores .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.MMM-chores .chores-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.MMM-chores .chores-container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.MMM-chores .confetti {
+  position: absolute;
+  z-index: 9999;
+}
+
+.MMM-chores .confetti-item {
+  width: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 10px;
+}
