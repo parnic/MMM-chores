@@ -10,6 +10,7 @@ Date.prototype.getWeekNumber = function() {
 Module.register("MMM-chores", {
     defaults: {
         chores: [],
+        cheers: ['YEA!', 'AWESOME!', 'YES!', 'DONE!'],
         id: "chore",
         showConfetti: true
     },
@@ -75,9 +76,14 @@ Module.register("MMM-chores", {
         }
         cb.onclick = (ev) => {
             localStorage.setItem(ev.target.id, cb.checked ? 1 : 0)
+            const numItems = 2
+            const randVal = Math.floor(Math.random() * 1000)
             if (this.config.showConfetti && cb.checked) {
-                let loc = this.getElementPosition(cb)
-                this.createConfetti(loc.x, loc.y, 20)
+                if (randVal % numItems == 0) {
+                    this.createConfetti(ev.clientX, ev.clientY, 20)
+                } else {
+                    this.createCheer(ev.clientX, ev.clientY, this.config.cheers[Math.floor(Math.random() * this.config.cheers.length)])
+                }
             }
         }
 
@@ -164,29 +170,37 @@ Module.register("MMM-chores", {
         }, 33.33);
     },
 
-    getElementPosition(el) {
-        var xPosition = 0;
-        var yPosition = 0;
+    createCheer(x, y, word) {
+        let createElement = document.createElement('div')
+        createElement.classList.add('MMM-chores', 'confetti')
+        let makeId = this.randomId(10)
+        createElement.setAttribute('data-mmm-chores-id', makeId)
+        let cheerHTML = ''
+        let colors = ['#2162ff', '#9e21ff', '#21a9ff', '#a9ff21', '#ff2184']
 
-        while (el) {
-            if (el.tagName.toLowerCase() === "BODY".toLowerCase()) {
-                // deal with browser quirks with body/window/document and page scroll
-                var xScrollPos = el.scrollLeft || document.documentElement.scrollLeft;
-                var yScrollPos = el.scrollTop || document.documentElement.scrollTop;
-
-                xPosition += (el.offsetLeft - xScrollPos + el.clientLeft);
-                yPosition += (el.offsetTop - yScrollPos + el.clientTop);
-            } else {
-                xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
-                yPosition += (el.offsetTop - el.scrollTop + el.clientTop);
-            }
-
-            el = el.offsetParent;
+        for (var i = 0; i < word.length; ++i) {
+            let color = Math.floor(Math.random() * (colors.length))
+            cheerHTML += `<span class="cheer-item" style="color: ${colors[color]}">${word[i]}</span>`
         }
 
-        return {
-            x: xPosition,
-            y: yPosition
-        };
+        createElement.style.position = `fixed`
+        createElement.style.top = `${y - 20}px`
+        createElement.style.left = `${x}px`
+        createElement.innerHTML = cheerHTML
+        document.body.appendChild(createElement)
+
+        let opacity = 1
+        let t = 0
+        let interval = setInterval(function() {
+            createElement.style.transform = `translateY(${t * -35}px)`
+            createElement.style.opacity = opacity
+            t += 0.1
+            opacity -= 0.02
+            if (t >= 6) {
+                t = 0.1
+                createElement.remove()
+                clearInterval(interval)
+            }
+        }, 33.33)
     }
 })
