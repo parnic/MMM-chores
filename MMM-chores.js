@@ -1,3 +1,11 @@
+Date.prototype.getWeekNumber = function() {
+    let d = new Date(Date.UTC(this.getFullYear(), this.getMonth(), this.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7)
+};
+
 Module.register("MMM-chores", {
     defaults: {
         chores: [],
@@ -47,11 +55,8 @@ Module.register("MMM-chores", {
         return ty + tm + td
     },
 
-    getWeekString(todaydate) {
-        let oneJan =  new Date(todaydate.getFullYear(), 0, 1)
-        let numberOfDays =  Math.floor((todaydate - oneJan) / (24 * 60 * 60 * 1000))
-        let result = Math.ceil((todaydate.getDay() + 1 + numberOfDays) / 7)
-        return String(todaydate.getFullYear()) + String(result).padStart(2, '0')
+    getWeekString(date) {
+        return date.getFullYear() + String(date.getWeekNumber()).padStart(2, '0')
     },
 
     getCheckbox(label, id) {
