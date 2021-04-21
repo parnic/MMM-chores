@@ -97,10 +97,10 @@ Module.register("MMM-chores", {
         var result = [];
         var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         var charactersLength = characters.length;
-        for ( var i = 0; i < length; i++ ) {
-          result.push(characters.charAt(Math.floor(Math.random() * charactersLength)));
-       }
-       return result.join('');
+        for (var i = 0; i < length; i++) {
+            result.push(characters.charAt(Math.floor(Math.random() * charactersLength)));
+        }
+        return result.join('');
     },
 
     createConfetti(x, y, confettiItems) {
@@ -109,9 +109,9 @@ Module.register("MMM-chores", {
         let makeId = this.randomId(10);
         createElement.setAttribute('data-mmm-chores-id', makeId);
         let confettiHTML = '';
-        let colors = [ '#2162ff', '#9e21ff', '#21a9ff', '#a9ff21', '#ff2184' ]
+        let colors = ['#2162ff', '#9e21ff', '#21a9ff', '#a9ff21', '#ff2184']
 
-        for(var i = 0; i < confettiItems; ++i) {
+        for (var i = 0; i < confettiItems; ++i) {
             let color = Math.floor(Math.random() * (colors.length));
             confettiHTML += `<div class="confetti-item" style="background-color: ${colors[color]};" data-angle="${Math.random()}" data-speed="${Math.random()}"></div>`;
             confettiHTML += `<div class="confetti-item reverse" style="background-color: ${colors[color]};" data-angle="${Math.random()}" data-speed="${Math.random()}"></div>`;
@@ -123,7 +123,7 @@ Module.register("MMM-chores", {
         createElement.innerHTML = confettiHTML;
         document.body.appendChild(createElement);
 
-        let gravity =  50;
+        let gravity = 50;
         let maxSpeed = 105000;
         let minSpeed = 65000;
         let t = 0;
@@ -136,7 +136,7 @@ Module.register("MMM-chores", {
             document.querySelectorAll(`[data-mmm-chores-id="${makeId}"] .confetti-item`).forEach(function(item) {
                 let modifierX = 1;
                 let modifierY = 1;
-                if(item.classList.contains('reverse')) {
+                if (item.classList.contains('reverse')) {
                     modifierX = -1;
                 }
                 item.style.opacity = opacity;
@@ -146,16 +146,16 @@ Module.register("MMM-chores", {
                 let angle = (randomNumber * (maxAngle - minAngle) + minAngle) / 1000;
                 let speed = (randomNumber * (maxSpeed - minSpeed) + minSpeed) / 1000;
                 let x = speed * t * Math.cos(angle) + (50 * otherRandom * t);
-                let y = speed * t * Math.sin(angle) - (0.5 * gravity * Math.pow(t, 2))  + (50 * otherRandom * t);
+                let y = speed * t * Math.sin(angle) - (0.5 * gravity * Math.pow(t, 2)) + (50 * otherRandom * t);
                 item.style.transform = `translateX(${x * modifierX}px) translateY(${y * -1 * modifierY}px) rotateY(${newRotateAngle}deg) scale(${1})`;
             })
 
             t += 0.1;
             rotateAngle += 3;
             opacity -= 0.02;
-            if(t >= 6) {
+            if (t >= 6) {
                 t = 0.1;
-                if(document.querySelector(`[data-mmm-chores-id="${makeId}"]`) !== null) {
+                if (document.querySelector(`[data-mmm-chores-id="${makeId}"]`) !== null) {
                     document.querySelector(`[data-mmm-chores-id="${makeId}"]`).remove();
                 }
                 clearInterval(interval);
@@ -168,24 +168,24 @@ Module.register("MMM-chores", {
         var yPosition = 0;
 
         while (el) {
-          if (el.tagName.toLowerCase() === "BODY".toLowerCase()) {
-            // deal with browser quirks with body/window/document and page scroll
-            var xScrollPos = el.scrollLeft || document.documentElement.scrollLeft;
-            var yScrollPos = el.scrollTop || document.documentElement.scrollTop;
+            if (el.tagName.toLowerCase() === "BODY".toLowerCase()) {
+                // deal with browser quirks with body/window/document and page scroll
+                var xScrollPos = el.scrollLeft || document.documentElement.scrollLeft;
+                var yScrollPos = el.scrollTop || document.documentElement.scrollTop;
 
-            xPosition += (el.offsetLeft - xScrollPos + el.clientLeft);
-            yPosition += (el.offsetTop - yScrollPos + el.clientTop);
-          } else {
-            xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
-            yPosition += (el.offsetTop - el.scrollTop + el.clientTop);
-          }
+                xPosition += (el.offsetLeft - xScrollPos + el.clientLeft);
+                yPosition += (el.offsetTop - yScrollPos + el.clientTop);
+            } else {
+                xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+                yPosition += (el.offsetTop - el.scrollTop + el.clientTop);
+            }
 
-          el = el.offsetParent;
+            el = el.offsetParent;
         }
 
         return {
-          x: xPosition,
-          y: yPosition
+            x: xPosition,
+            y: yPosition
         };
     }
 })
