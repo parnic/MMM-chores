@@ -17,6 +17,7 @@ Module.register("MMM-chores", {
 
     start() {
         this.doUpdate()
+        this.sendSocketNotification("CHORES_READY")
     },
 
     doUpdate() {
@@ -49,6 +50,17 @@ Module.register("MMM-chores", {
         return wrapper
     },
 
+    socketNotificationReceived(notification, payload) {
+        if (notification === "CHORES_DATA_READ") {
+            for (const v in payload) {
+                const elem = document.getElementById(v)
+                if (elem) {
+                    elem.checked = payload[v] === 1
+                }
+            }
+        }
+    },
+
     getDateString(date) {
         var td = String(date.getDate()).padStart(2, '0')
         var tm = String(date.getMonth() + 1).padStart(2, '0')
@@ -71,11 +83,11 @@ Module.register("MMM-chores", {
         if (id !== undefined) {
             cb.id = id
         }
-        if (parseInt(localStorage.getItem(cb.id), 10)) {
-            cb.checked = true
-        }
         cb.onclick = (ev) => {
-            localStorage.setItem(ev.target.id, cb.checked ? 1 : 0)
+            let targetId = ev.target.id
+            let val = cb.checked ? 1 : 0
+            this.sendSocketNotification("CHORES_ADD_DATA", { "key": targetId, "val": val })
+
             const numItems = 2
             const randVal = Math.floor(Math.random() * 1000)
             if (this.config.showConfetti && cb.checked) {
