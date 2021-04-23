@@ -52,12 +52,8 @@ Module.register("MMM-chores", {
 
     socketNotificationReceived(notification, payload) {
         if (notification === "CHORES_DATA_READ") {
-            for (const v in payload) {
-                const elem = document.getElementById(v)
-                if (elem) {
-                    elem.checked = payload[v] === 1
-                }
-            }
+            this.saved_data = payload
+            this.updateDom()
         }
     },
 
@@ -83,9 +79,14 @@ Module.register("MMM-chores", {
         if (id !== undefined) {
             cb.id = id
         }
+        cb.checked = this.saved_data && this.saved_data[cb.id] === 1
         cb.onclick = (ev) => {
             let targetId = ev.target.id
             let val = cb.checked ? 1 : 0
+            if (!this.saved_data) {
+                this.saved_data = {}
+            }
+            this.saved_data[targetId] = val
             this.sendSocketNotification("CHORES_ADD_DATA", { "key": targetId, "val": val })
 
             const numItems = 2
